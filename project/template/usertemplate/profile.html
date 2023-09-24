@@ -1,0 +1,575 @@
+{% extends 'baseuser.html' %}
+{% block title %}Profile{% endblock title %}
+<style>
+  .capitalize-and-bold {
+      text-transform: uppercase;
+      font-weight: bold;
+      /* Add any additional styles you want */
+  }
+</style>
+
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<div class="container mt-5">
+<div class="row gutters">
+    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+        <!-- User Profile Card -->
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="account-settings">
+                    <div class="row p-4 mt-5">
+                        <button type="button"
+                                class="btn btn-primary btn-block btn-lg w-100"
+                                onclick="window.location.href='{% url 'my_orders' %}'">View Order</button>
+                        <button type="button"
+                                class="btn btn-primary btn-block btn-lg w-100 mt-2"
+                                onclick="window.location.href='{% url 'user_profile' %}'">View Profile</button> 
+                         <button type="button"
+                                class="btn btn-primary btn-block btn-lg w-100"
+                                onclick="window.location.href='{% url 'reset_password_page' %}'">Reset Passwrod</button> 
+                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Address Cards Section -->
+   
+      <!-- Address Cards Section -->
+          <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                  <h3 class="mb-2  text-center capitalize-and-bold"> Welcome   {{user.first_name}}</h3>
+                  <section style="background-color: #eee;">
+                      <div class="container py-5">
+                        <div class="row">
+                          <div class="col">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <div class="card mb-4">
+                              <div class="card-body text-center">
+                                      {% comment %} <img src="{{ profile_image.url }}" alt="Profile Photo" class="rounded-circle mt-5 mb-3" style="width: 150px; height: 150px;">
+                                      <h5 class="card-title capitalize-and-bold">{{user.first_name}}</h5> {% endcomment %}
+                         
+                                {% comment %} <img src="{{profile_address.profile_image.url}}" alt="avatar"
+                                  class="rounded-circle img-fluid" style="width: 150px;"> {% endcomment %}
+                          
+                                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                  class="rounded-circle img-fluid" style="width: 150px;">
+                          
+                                <div class="text-center">
+                                <button type="button" class="btn btn-primary btn-sm mt-2" onclick="document.getElementById('profile-photo-input').click();">
+                                  Upload Photo
+                              </button>
+                              <input type="file" id="profile-photo-input"  style="display: none;">
+                          </div>
+                          <button type="button"
+                                              class="btn btn-primary btn mt-2"
+                                              data-toggle="modal"
+                                              data-target="#exampleModalCenter">Add Address</button>
+                               
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-8">
+                            <div class="card mb-4">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <p class="mb-0">Full Name</p>
+                                  </div>
+                                  <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{user.first_name}}</p>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                  </div>
+                                  <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{user.email}}</p>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <p class="mb-0">Phone</p>
+                                  </div>
+                                  <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{user.phone_number}}</p>
+                                  </div>
+                                </div>
+                                <hr>
+                                {% comment %} <div class="row">
+                                  <div class="col-sm-3">
+                                    <p class="mb-0">Wallet balance</p>
+                                  </div>
+                                  <div class="col-sm-9">
+                                    <p class="text-muted mb-0"> ₹ {{user_wallet.balance}}</p>
+                                  </div> {% endcomment %}
+                                </div>
+                              </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 d-flex flex-wrap">
+                            {% for user_details in user_details %}
+                                  <div class="card mr-2 mb-2" style="    width: 15rem;
+                                  height: 14rem;">
+                                      <div class="card-body " style="border-radius: 10px">
+                                          
+                                          <p>
+                                              {{ user_details.first_name }}
+                                              <br>
+                                              {{ user_details.email }}
+                                              <br>
+                                              {{ user_details.address_line_1}}, {{ user_details.address_line_2}}
+                                              <br>
+                                              {{ user_details.area }}
+                                              <br>
+                                              {{ user_details.state }}, {{ user_details.country }}
+                                              <br>
+                                              Pin:{{ user_details.postcode }}
+                                              <br>
+                                              Ph:{{ user_details.phone_number }}
+                                          </p>
+                                          <div class="d-flex justify-content-center">
+                                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1"
+                                              data-address-id="{{ user_details.id }}"
+                                              data-target="#exampleModalCenter1"
+                                              data-address-first-name="{{ user_details.first_name }}"
+                                              data-address-last-name="{{ user_details.last_name }}"
+                                              data-address-email="{{ user_details.email }}"
+                                              data-address-mobile="{{ user_details.phone }}"
+                                              data-address-address-line1="{{ user_details.address_line_1 }}"
+                                              data-address-address-line2="{{ user_details.address_line_2 }}"
+                                              data-address-city="{{ user_details.area }}"
+                                              data-address-state="{{ user_details.state }}"
+                                              data-address-country="{{ user_details.country }}"
+                                              data-address-zip="{{ user_details.postcode }}">
+                                              <i class="fas fa-edit"></i>
+                                      </button>
+                                      <form action="{% url 'delete_address' %}" method="post">
+                                          {% csrf_token %}
+                                          <input type="number" name="address_id" value="{{ profile_address.id  }}"hidden>
+                                              <button type="submit" class="btn btn-danger ml-2"><i class="fas fa-trash"></i></button>
+                                      </form>
+                                          </div>
+                                      </div>
+                                  </div>
+                              {% endfor %}
+                          </div>
+                      </div>
+                      
+                    </section>
+                    
+                    <div class="row gutters">
+                        
+                      <div class="col-md-12 align-center">
+                         
+      
+     
+                      
+       
+                        
+                        <div class="card-body " style="border-radius: 10px">
+                        </div>
+                        <!-- Personal Details Section -->
+                    </div>
+            </div>
+        </div>
+    
+    <!-- Modal for add address -->
+    <div class="modal fade"
+         id="exampleModalCenter"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--Modal Body start-->
+                    <form action="{% url 'add_address' %}"
+                          method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row gutters">
+                            <!-- Personal Details Section -->
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-2 text-primary">Personal Details</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="fullName">First Name</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="firstName"
+                                           placeholder="Enter first name"
+                                           name="first_name"
+                                           value="{{ user.first_name }}">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                              <div class="form-group">
+                                  <label for="fullName">Last Name</label>
+                                  <input type="text"
+                                         class="form-control"
+                                         id="lastName"
+                                         placeholder="Enter last name"
+                                         name="last_name"
+                                         value="{{ user.last_name }}">
+                              </div>
+                          </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="eMail">Email</label>
+                                    <input type="email"
+                                           class="form-control"
+                                           id="eMail"
+                                           name="email"
+                                           placeholder="Enter email ID"
+                                           value="{{ user.email }}">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="phone"
+                                           placeholder="Enter phone number"
+                                           name="phone"
+                                           >
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <!-- Address Section -->
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mt-3 mb-2 text-primary">Address</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="House">address_line1</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="House_name"
+                                           placeholder="Enter House name"
+                                           name="address_line1">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="Street">address_line2</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="Street"
+                                           placeholder="Enter Street"
+                                           name="address_line2">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="ciTy">City</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="ciTy"
+                                           placeholder="Enter City"
+                                           name="city">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="sTate">State</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="sTate"
+                                           placeholder="Enter State"
+                                           name="state">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="counTry">Country</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="counTry"
+                                           placeholder="Enter Country"
+                                           name="country">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="zIp">Postal Code</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="zIp"
+                                           placeholder="Enter Postal Code"
+                                           name="postcode">
+                                    <div id="zip-error" class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" name="address_id" id="" hidden>
+                        <!-- Save Button -->
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="text-right">
+                                    <button type="submit" id="submit" name="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--Modal Body End-->
+    </div>
+</div>
+</div>
+
+
+<!-- Modal for edit address -->
+<div class="modal fade"
+id="exampleModalCenter1"
+tabindex="-1"
+role="dialog"
+aria-labelledby="exampleModalCenterTitle"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    
+    <!--Modal Body start-->
+    <form action=""
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row gutters">
+            <!-- Personal Details Section -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h6 class="mb-2 text-primary">Personal Details</h6>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="fullName">First Name</label>
+                    <input type="text"
+                           class="form-control"
+                           id="firstName"
+                           placeholder="Enter first name"
+                           name="first_name"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                  <label for="fullName">Last Name</label>
+                  <input type="text"
+                         class="form-control"
+                         id="lastName"
+                         placeholder="Enter last name"
+                         name="last_name"
+                         value="">
+              </div>
+          </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="eMail">Email</label>
+                    <input type="email"
+                           class="form-control"
+                           id="eMail"
+                           placeholder="Enter email ID"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="mobile">Phone</label>
+                    <input type="text"
+                           class="form-control"
+                           id="phone"
+                           placeholder="Enter phone number"
+                           name="phone"
+                           value="">
+                </div>
+            </div>
+            
+        </div>
+        <!-- Address Section -->
+        <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h6 class="mt-3 mb-2 text-primary">Address </h6>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="House">Address 1</label>
+                    <input type="text"
+                           class="form-control"
+                           id="addressLine1"
+                           placeholder="Enter address "
+                           name="address_line1"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="Street">Address 2</label>
+                    <input type="text"
+                           class="form-control"
+                           id="addressLine2"
+                           placeholder="Enter address"
+                           name="address_line2"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="ciTy">City</label>
+                    <input type="text"
+                           class="form-control"
+                           id="city"
+                           placeholder="Enter City"
+                           name="city"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="sTate">State</label>
+                    <input type="text"
+                           class="form-control"
+                           id="state"
+                           placeholder="Enter State"
+                           name="state"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="counTry">Country</label>
+                    <input type="text"
+                           class="form-control"
+                           id="country"
+                           placeholder="Enter Country"
+                           name="country"
+                           value="">
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="zip">Postal Code</label>
+                    <input type="text"
+                           class="form-control"
+                           id="zip"
+                           placeholder="Enter Postal Code"
+                           name="postcode"
+                           value=""> 
+                </div>
+            </div>
+          
+            <input type="number" name="address_id"  value="{{profile_address.id}}"hidden>
+
+
+        </div>
+        <!-- Save Button -->
+        <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="text-right">
+                    <button type="submit" id="submit" name="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</div>
+<!--Modal Body End-->
+</div>
+</div>
+</div>
+</div>
+
+<!-- JavaScript dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Load Avatar Image -->
+<script>
+
+$(document).ready(function() {
+    $('#exampleModalCenter1').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var addressId = button.data('address-id');
+        var addressFirstName = button.data('address-first-name');
+        var addressLastName = button.data('address-last-name');
+        var addressEmail = button.data('address-email');
+        var addressMobile = button.data('address-mobile');
+        var addressAddressLine1 = button.data('address-address-line1');
+        var addressAddressLine2 = button.data('address-address-line2'); data-address-address-line2
+        var addressCity = button.data('address-city');
+        var addressState = button.data('address-state');
+        var addressCountry = button.data('address-country');
+        var addressZip = button.data('address-zip');
+
+        var modal = $(this);
+        modal.find('.modal-title').text('Edit Address');
+        modal.find('#address_id').val(addressId);
+        modal.find('#firstName').val(addressFirstName);
+        modal.find('#lastName').val(addressLastName);
+        modal.find('#eMail').val(addressEmail);
+        modal.find('#phone').val(addressMobile);
+        modal.find('#addressLine1').val(addressAddressLine1);
+        modal.find('#addressLine2').val(addressAddressLine2);
+        modal.find('#city').val(addressCity);
+        modal.find('#state').val(addressState);
+        modal.find('#country').val(addressCountry);
+        modal.find('#zip').val(addressZip);
+    });
+});
+
+</script>
+<script>
+// Postal code validation function
+function validatePostalCode(postalCode) {
+// Regular expression for 6-digit numerical postal code
+var regex = /^\d{6}$/;
+
+// Check if postal code matches the pattern
+return regex.test(postalCode);
+}
+
+// Handle form submission
+document.querySelector('form').addEventListener('submit', function (event) {
+var postalCodeInput = document.getElementById('zIp');
+var postalCode = postalCodeInput.value.trim();
+
+if (!validatePostalCode(postalCode)) {
+    postalCodeInput.classList.add('is-invalid');
+    document.getElementById('zip-error').textContent = 'Please enter a valid 6-digit numerical postal code.';
+    event.preventDefault(); // Prevent form submission if postal code is invalid
+} else {
+    postalCodeInput.classList.remove('is-invalid');
+    document.getElementById('zip-error').textContent = '';
+}
+});
+</script>
+{% endblock %}

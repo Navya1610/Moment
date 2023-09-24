@@ -1,0 +1,69 @@
+{% extends 'baseadmin.html' %}
+{% block title %}ADMIN-HOME{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h2>Order Amounts by Status</h2>
+    <canvas id="orderAmountChart" width="400" height="200"></canvas>
+</div>
+
+<div class="container mt-5">
+    <h2>Sales Overview</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Yearly Sales</h4>
+            <p>Total: ₹{{ yearly_sales }}</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Monthly Sales</h4>
+            <p>Total: ₹{{ monthly_sales }}</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Weekly Sales</h4>
+            <p>Total: ₹{{ weekly_sales }}</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var statusLabels = [
+        {% for status_total in status_order_totals %}
+            "{{ status_total.status }}",
+        {% endfor %}
+    ];
+
+    var totalAmounts = [
+        {% for status_total in status_order_totals %}
+            {{ status_total.total }},
+        {% endfor %}
+    ];
+
+    var ctx = document.getElementById('orderAmountChart').getContext('2d');
+    var orderAmountChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                label: 'Total Amount',
+                data: totalAmounts,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return '₹' + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends 'baseadmin.html' %}
+{% block title %}Color{% endblock title %}
+{% block content %}
+
+<div class="col-sm-12 col-xl-6">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Color</h6>
+        
+        <!-- Add color Button -->
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addcolorModal">
+            Add Color
+        </button>
+        
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">color Id</th>
+                    <th scope="col">color Name</th>
+                    {% comment %} <th scope="col">Actions</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for color in colour %}
+                <tr>
+                    <th scope="row">{{ color.id }}</th>
+                    <td>{{ color.colour_name }}</td>
+                    {% comment %} <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editcolorModal{{ color.id }}" onclick="editcolorModal({{ color.id }}, '{{ color.color_name }}')">Edit</button>
+                    </td> {% endcomment %}
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="addcolorModal" tabindex="-1" aria-labelledby="addcolorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addcolorModalLabel">Add Color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add form fields here -->
+                <form method="POST" action="{% url 'add_colour' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="color_name">color Name</label>
+                        <input type="text" class="form-control" id="color_name" name="color" required pattern = "^[a-zA-Z]+$" title="Only letters are allowed (no spaces or numbers)">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

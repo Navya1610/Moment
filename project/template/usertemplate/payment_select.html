@@ -1,0 +1,53 @@
+{% extends "baseuser.html" %}
+{% load static %}
+{% block title %}Payment Select{% endblock title %}
+{% block body %}
+
+<div class="container" style="margin-top:100px;">
+    
+    <form action="{% url "payment_select" checkout_id %}" method="post">
+        {% csrf_token %}
+        <div class="text-center mb-4">
+            <img src="{% static 'user/images/payment 1.jpg' %}" alt="Payment Options" width="200" height="200">
+        </div>
+            <div class="row mb-3">
+                <div class="col-lg-4 mb-3">
+                    <!-- Default checked radio -->
+                    <div class="form-check h-100 border rounded-3">
+                        <div class="p-3">
+                            <input class="form-check-input" type="radio" name="payment_mode" id="payment_mode" value="cod" checked />
+                            <label class="form-check-label" for="payment_mode">
+                                Cash On Delivery
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <!-- Default radio -->
+                    <div class="form-check h-100 border rounded-3">
+                        <div class="p-3">
+                            <input class="form-check-input" type="radio" name="payment_mode" id="payment_mode" value="razorpay" />
+                            <label class="form-check-label" for="payment_mode">
+                                Razorpay
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <button type="submit" class="btn btn-primary">Proceed</button>
+                </div>
+            </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock body %}
