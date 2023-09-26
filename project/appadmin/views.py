@@ -22,16 +22,24 @@ from datetime import datetime, timedelta
 
 def admin_signup(request):
     print("hy")
-    if request.user.is_authenticated and request.superuser.is_superuser:
+    if request.user.is_authenticated and request.user.is_superuser:
         return redirect(index_admin)
     if request.method == 'POST':
         email = request.POST.get('ad_email')
         print(email)
         password = request.POST.get('ad_password')
         print(password)
-        user = authenticate(username=email,password=password)
+        try:
+            user=CustomUser.objects.get(email=email)
+            if user.is_active == False:
+                user.is_active = True
+                user.save()
+        except:
+            messages.info(request, 'Invalid Credentials')
+        user = authenticate(email=email,password=password)
         print(user)
         if user and user.is_superuser:
+            
             login(request,user)
             return redirect(index_admin)
         else:
