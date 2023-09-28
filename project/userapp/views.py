@@ -292,37 +292,45 @@ def address_view(request):
 
 
 def edit_address(request):
-    user = request.user
-    address_id = request.POST.get('address.id')
-    address = get_object_or_404(UserDetails, user = user , id = address_id)
-    if address_id:
+    print("8888888888")
+    # user = request.user
+    address_id = request.POST.get('user_details.id')
+    print(address_id,"88888888888")
+    # address = get_object_or_404(UserDetails, user = user , id = address_id)
+    # if address_id:
+    #     try:
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        address_line1 = request.POST.get('address_line1')
+        address_line2 = request.POST.get('address_line2')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        country = request.POST.get('country')
+        postcode = request.POST.get('postcode')
+        
+        
         try:
-            if request.method == 'POST':
-                first_name = request.POST.get('first_name')
-                last_name = request.POST.get('last_name')
-                phone = request.POST.get('phone')
-                email = request.POST.get('email')
-                address_line1 = request.POST.get('address_line1')
-                address_line2 = request.POST.get('address_line2')
-                city = request.POST.get('city')
-                state = request.POST.get('state')
-                country = request.POST.get('country')
-                postcode = request.POST.get('postcode')
+            user_details = UserDetails.objects.get(pk = address_id)
+            user_details.first_name = first_name
+            user_details.last_name = last_name
+            user_details.email = email
+            user_details.phone_number = phone
+            user_details.address_line_1 = address_line1
+            user_details.address_line_2 = address_line2
+            user_details.area = city
+            user_details.state = state
+            user_details.country = country
+            user_details.postcode = postcode
+            user_details.save()
             
-            
-                address.first_name = first_name
-                address.last_name = last_name
-                address.phone_number = phone
-                address.email = email
-                address.address_line_1 = address_line1
-                address.address_line_2 = address_line2
-                address.area = city
-                address.state = state
-                address.country = country
-                address.postcode = postcode
-                address.save()
-        except (ValueError, UserDetails.ObjectDoesNotExist):
-            pass
+        except UserDetails.DoesNotExist:
+            print("address not found")    
+    
+        
                 
     return redirect(user_profile)
     

@@ -360,7 +360,7 @@ aria-hidden="true">
 <div class="modal-body">
     
     <!--Modal Body start-->
-    <form action=""
+    <form action="{% url "edit_address" %}"
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
@@ -375,9 +375,8 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="firstName"
-                           placeholder="Enter first name"
                            name="first_name"
-                           value="">
+                           value="{{user.first_name}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -386,9 +385,8 @@ aria-hidden="true">
                   <input type="text"
                          class="form-control"
                          id="lastName"
-                         placeholder="Enter last name"
                          name="last_name"
-                         value="">
+                         value="{{ user.last_name }}">
               </div>
           </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -397,8 +395,8 @@ aria-hidden="true">
                     <input type="email"
                            class="form-control"
                            id="eMail"
-                           placeholder="Enter email ID"
-                           value="">
+                           
+                           value="{{user.email}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -407,9 +405,9 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="phone"
-                           placeholder="Enter phone number"
+                           
                            name="phone"
-                           value="">
+                           value="{{user.phone_number}}">
                 </div>
             </div>
             
@@ -425,9 +423,9 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="addressLine1"
-                           placeholder="Enter address "
+                           
                            name="address_line1"
-                           value="">
+                           value="{{user_details.address_line_1}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -436,9 +434,9 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="addressLine2"
-                           placeholder="Enter address"
+                           
                            name="address_line2"
-                           value="">
+                           value="{{user_details.address_line_2}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -447,9 +445,9 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="city"
-                           placeholder="Enter City"
+                           
                            name="city"
-                           value="">
+                           value="{{user_details.area}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -458,9 +456,9 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="state"
-                           placeholder="Enter State"
+                           
                            name="state"
-                           value="">
+                           value="{{user_details.state}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -469,9 +467,8 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="country"
-                           placeholder="Enter Country"
                            name="country"
-                           value="">
+                           value="{{user_details.country}}">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -480,13 +477,12 @@ aria-hidden="true">
                     <input type="text"
                            class="form-control"
                            id="zip"
-                           placeholder="Enter Postal Code"
                            name="postcode"
-                           value=""> 
+                           value="{{user_details.postcode}}"> 
                 </div>
             </div>
           
-            <input type="number" name="address_id"  value="{{profile_address.id}}"hidden>
+            <input type="number" name="address_id" id="edit-address-id" value="" hidden>
 
 
         </div>
@@ -515,36 +511,37 @@ aria-hidden="true">
 <!-- Load Avatar Image -->
 <script>
 
-$(document).ready(function() {
-    $('#exampleModalCenter1').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var addressId = button.data('address-id');
-        var addressFirstName = button.data('address-first-name');
-        var addressLastName = button.data('address-last-name');
-        var addressEmail = button.data('address-email');
-        var addressMobile = button.data('address-mobile');
-        var addressAddressLine1 = button.data('address-address-line1');
-        var addressAddressLine2 = button.data('address-address-line2'); data-address-address-line2
-        var addressCity = button.data('address-city');
-        var addressState = button.data('address-state');
-        var addressCountry = button.data('address-country');
-        var addressZip = button.data('address-zip');
-
-        var modal = $(this);
-        modal.find('.modal-title').text('Edit Address');
-        modal.find('#address_id').val(addressId);
-        modal.find('#firstName').val(addressFirstName);
-        modal.find('#lastName').val(addressLastName);
-        modal.find('#eMail').val(addressEmail);
-        modal.find('#phone').val(addressMobile);
-        modal.find('#addressLine1').val(addressAddressLine1);
-        modal.find('#addressLine2').val(addressAddressLine2);
-        modal.find('#city').val(addressCity);
-        modal.find('#state').val(addressState);
-        modal.find('#country').val(addressCountry);
-        modal.find('#zip').val(addressZip);
+    $(document).ready(function() {
+        $('#exampleModalCenter1').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var addressId = button.data('address-id');
+            var addressFirstName = button.data('addressFirstName'); // Corrected attribute name
+            var addressLastName = button.data('addressLastName'); // Corrected attribute name
+            var addressEmail = button.data('addressEmail'); // Corrected attribute name
+            var addressMobile = button.data('addressMobile'); // Corrected attribute name
+            var addressAddressLine1 = button.data('addressAddressLine1'); // Corrected attribute name
+            var addressAddressLine2 = button.data('addressAddressLine2'); // Corrected attribute name
+            var addressCity = button.data('addressCity'); // Corrected attribute name
+            var addressState = button.data('addressState'); // Corrected attribute name
+            var addressCountry = button.data('addressCountry'); // Corrected attribute name
+            var addressZip = button.data('addressZip'); // Corrected attribute name
+    
+            var modal = $(this);
+            modal.find('.modal-title').text('Edit Address');
+            modal.find('#address_id').val(addressId);
+            modal.find('#firstName').val(addressFirstName);
+            modal.find('#lastName').val(addressLastName);
+            modal.find('#eMail').val(addressEmail);
+            modal.find('#phone').val(addressMobile);
+            modal.find('#addressLine1').val(addressAddressLine1);
+            modal.find('#addressLine2').val(addressAddressLine2);
+            modal.find('#city').val(addressCity);
+            modal.find('#state').val(addressState);
+            modal.find('#country').val(addressCountry);
+            modal.find('#zip').val(addressZip);
+        });
     });
-});
+    
 
 </script>
 <script>
@@ -572,4 +569,17 @@ if (!validatePostalCode(postalCode)) {
 }
 });
 </script>
+<script>
+    $(document).ready(function() {
+        $('#exampleModalCenter1').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var addressId = button.data('address-id');
+    
+            // Set the value of the hidden input field
+            $('#edit-address-id').val(addressId);
+    
+            // Rest of your code to populate other form fields...
+        });
+    });
+    </script>
 {% endblock %}

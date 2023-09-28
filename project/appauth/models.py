@@ -16,7 +16,6 @@ class UserDetails(models.Model):
     last_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15,unique=True)
     email = models.CharField(max_length=30, default='default@example.com')
-    # password = models.CharField(max_length=100)
     address_line_1 = models.CharField(max_length=100, null=True, blank=True)
     address_line_2 = models.CharField(max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=10, null=True, blank=True)

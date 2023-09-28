@@ -77,7 +77,7 @@ def callback(request):
             print("sucesssssssssssss")
             order.status = PaymentStatus.SUCCESS
             order.save()
-            return render(request, "confirmation.html", context={"status": order.status})
+            return render(request, "usertemplate/confirmation.html", context={"status": order.status})
         else:
             order.status = PaymentStatus.FAILURE
             print("ffffffffffffffff")
