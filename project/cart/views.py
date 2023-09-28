@@ -20,6 +20,7 @@ from decimal import Decimal
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 import uuid
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 
 
@@ -29,8 +30,8 @@ RAZORPAY_KEY_SECRET = '3FqFEd2qxQICvlqYiKaaByBU'
 
 
 # Create your views here.
-
-
+@login_required(login_url='handlelogin')
+@never_cache
 def add_cart(request, product_id, variant_id):
     if request.method == 'POST':
         print("add cartttttttttttttttttttttttttttt")
@@ -86,6 +87,7 @@ def add_cart(request, product_id, variant_id):
 
 
 @login_required(login_url='handlelogin')
+@never_cache
 def cart(request,  total_discount = 0, cart_items = None):
     total = 0
     quantity = 0
@@ -231,7 +233,8 @@ def remove_cart_item(request, cart_item_id):
 
 
 
-
+@login_required(login_url='handlelogin')
+@never_cache
 def checkout(request):
     print("cheooooooooooooooooooooo")
     
@@ -353,7 +356,8 @@ def checkout(request):
 
 
 
-
+@login_required(login_url='handlelogin')
+@never_cache
 def payment_select(request, checkout_id, unit_amount = 0):
     
     try:
@@ -503,7 +507,7 @@ def payment_select(request, checkout_id, unit_amount = 0):
     
     
     
-        
+@never_cache       
 def order_confirmation(request, order_id):
     print(order_id,"ttttttttttttttttttttttttttttt")
     order = get_object_or_404(Orders, pk=order_id)
@@ -517,8 +521,8 @@ def order_confirmation(request, order_id):
     }
     return render(request, "usertemplate/order_confirmation.html", context)
 
-
-
+@login_required(login_url='handlelogin')
+@never_cache
 def invoice(request,order_id):
     order = Orders.objects.get(id=order_id)
     return render(request, "usertemplate/invoice.html")

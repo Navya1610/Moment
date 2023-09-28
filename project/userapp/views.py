@@ -11,7 +11,7 @@ from django.db.models import Count
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # Create your views here.
-
+@login_required(login_url='handlelogin')
 @never_cache
 def welcome(request):
     return render(request,"usertemplate/welcome.html")
@@ -64,7 +64,7 @@ def index(request):
         return redirect('signup')
 
 
-
+@login_required(login_url='handlelogin')
 @never_cache
 def search(request):
     if 'search_product' in request.GET:
@@ -81,7 +81,7 @@ def search(request):
 
 
 
-
+@login_required(login_url='handlelogin')
 @never_cache
 def category_products(request, category_id):
     print("5555555555555555555555555555555555")
@@ -95,7 +95,7 @@ def category_products(request, category_id):
     
     return render(request, "usertemplate/menproducts.html", context)
 
-
+@login_required(login_url='handlelogin')
 @never_cache
 def productview(request, product_id):
     print("22222222222222222222")
@@ -109,7 +109,7 @@ def productview(request, product_id):
     return render(request,"usertemplate/singleproduct.html.html",context)
 
 
-
+@login_required(login_url='handlelogin')
 @never_cache
 def men_products(request):
     
@@ -128,7 +128,7 @@ def men_products(request):
 
 
 
-
+@login_required(login_url='handlelogin')
 @never_cache
 def women_products(request):
     
@@ -148,6 +148,7 @@ def women_products(request):
 
 
 @login_required(login_url='signup')
+@never_cache
 def product_view(request, product_id):
     
     product = get_object_or_404(Product, id= product_id)
@@ -169,7 +170,8 @@ def product_view(request, product_id):
 
 
 
-
+@login_required(login_url='handlelogin')
+@never_cache
 def invoice(request, order_id):
     order = get_object_or_404(Orders, id=order_id)
     order_items = OrderedProducts.objects.filter(order_id = order_id)
@@ -226,7 +228,8 @@ def invoice(request, order_id):
 
 
 
-
+@login_required(login_url='handlelogin')
+@never_cache
 def user_profile(request):
     user_details = UserDetails.objects.filter(user = request.user)
     return render(request, "usertemplate/profile.html", {'user_details':user_details})
@@ -285,7 +288,8 @@ def add_address(request):
 
 
 
-
+@login_required(login_url='handlelogin')
+@never_cache
 def address_view(request):
     user_details = UserDetails.objects.get(user=request.user)
     return render(request, "usertemplate/address_view.html", {'user_details': user_details})

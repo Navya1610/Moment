@@ -95,7 +95,7 @@ def user_details(request):
     
     return render(request,"admintemplate/user_details.html",{"data":data})
 
-
+@never_cache
 def user_block(request,user_id):
     if request.method == "POST":
         user = CustomUser.objects.get(id=user_id)
@@ -104,7 +104,7 @@ def user_block(request,user_id):
         print(user,'user blocked')
         return redirect(user_details)
     
-    
+@never_cache   
 def user_unblock(request,user_id):
     if request.method == "POST":
         user= CustomUser.objects.get(id=user_id)
@@ -126,7 +126,7 @@ def categorylist(request):
 
 
 
-@login_required
+@login_required(login_url='admin_signup')
 @never_cache
 def brandslist(request):
     print("brandlist")
@@ -137,7 +137,7 @@ def brandslist(request):
     #     return redirect(admin_log)
     return render(request,"admintemplate/brands.html",{'brand':brand})
 
-
+@never_cache
 def add_category(request):
     print("add category")
     if request.method == 'POST':
@@ -156,7 +156,7 @@ def add_category(request):
     return render(request,"admintemplate/category.html")
 
 
-
+@never_cache
 def add_brand(request):
     print("add brand")
     if request.method =='POST':
@@ -168,7 +168,7 @@ def add_brand(request):
  
  
 
-
+@never_cache
 def edit_category(request, category_id):
     print("edit category")
     if request.method == 'POST':
@@ -187,7 +187,7 @@ def edit_category(request, category_id):
         
         
 
-
+@never_cache
 def edit_brand(request, brand_id):
     print("edit brand")
     if request.method == 'POST':
@@ -204,7 +204,7 @@ def edit_brand(request, brand_id):
     return render(request, "admintemplate/brand.html", context)
 
 
-
+@login_required(login_url='admin_signup')
 @never_cache
 def orderlist(request):
     orders = Orders.objects.all()
@@ -219,7 +219,7 @@ def orderlist(request):
 
 
 
-
+@never_cache
 def manage_productstatus(request,order_id, item_id):
     
     order = get_object_or_404(Orders, id=order_id)
@@ -258,7 +258,7 @@ def manage_productstatus(request,order_id, item_id):
 
 
 
-
+@never_cache
 def manage_orderstatus(request, order_id):
     orders = get_object_or_404(Orders, id=order_id)
     if request.method =="POST":
@@ -295,7 +295,7 @@ def orderview(request, order_id):
 
 
 
-
+@never_cache
 def canncel_order(request, order_id):
     order = get_object_or_404(Orders, id = order_id)
     
@@ -388,7 +388,7 @@ def dashboard(request):
 #     return render(request,"admintemplate/index.html", context)
 
 
-
+@login_required(login_url='admin_signup')
 @never_cache
 def saleslist(request):
     sales_report = Orders.objects.all()
@@ -420,7 +420,7 @@ def saleslist(request):
 
 
 
-
+@login_required(login_url='admin_signup')
 @never_cache
 def coupon_list(request):
     coupons = Coupon.objects.all()
@@ -430,6 +430,9 @@ def coupon_list(request):
     return render(request, "admintemplate/coupon.html", context)
 
 
+
+
+@never_cache
 def add_coupon(request):
     if request.method == 'POST':
         
@@ -454,7 +457,7 @@ def add_coupon(request):
         return redirect('coupon_list')
     return redirect(request, "admintemplate/coupon.html")
 
-
+@never_cache
 def edit_coupon(request, coupon_id):
         if request.method == 'POST':
             edit_coupon_code = request.POST.get('coupon_code')

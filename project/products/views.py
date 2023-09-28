@@ -3,17 +3,22 @@ from django.shortcuts import render,redirect,get_object_or_404
 from appauth.models import Product,Category,Brands, Colour, Variants
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponse, Http404
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
 
 
 
 
 # Create your views here.
 
+
+@login_required
+@never_cache
 def mendisplay(request):
     return render(request,'usertemplate/menproducts.html')
 
-
-
+@login_required
+@never_cache
 def womendisplay(request):
     return render(request,"usertemplate/womenproducts.html")
 
@@ -51,8 +56,8 @@ def toggle_product_status(request, product_id):
 #     except Exception as e:
 #         return HttpResponse(f"An error occourred : {e}", status = 500)
 
-
-
+@login_required(login_url='admin_signup')
+@never_cache
 def productlist(request):
         products = Product.objects.all()
         categories = Category.objects.all()
@@ -72,7 +77,7 @@ def productlist(request):
         return render(request, "admintemplate/product.html",context)
 
 
-
+@never_cache
 def add_product(request):
     if request.method == 'POST':
         try:
@@ -141,7 +146,7 @@ def add_product(request):
 #         'edit': product
 #     }
 #     return render(request, "admintemplate/product.html", context)
-
+@never_cache
 def edit_product(request, id):
     product = get_object_or_404(Product, id=id)
     print("33333333333333333333333333")
@@ -181,13 +186,16 @@ def edit_product(request, id):
     return render(request, 'admintemplate/product.html', {'product': product})
 
 
+
+@login_required(login_url='admin_signup')
+@never_cache
 def colorlist(request):
     print("colourlist 00000000000000000000000000000000000")
     color = Colour.objects.all()
     return render(request,"admintemplate/colour.html",{'colour' : color})
 
 
-
+@never_cache
 def add_colour(request):
     print("add colorrrrrrrrrrrrrrrrrrrrrrrr")
     if request.method == 'POST':
@@ -258,7 +266,7 @@ def add_colour(request):
 
 
 
-        
+@never_cache       
 def add_variant(request,product_id):
     if request.method == 'POST':
         product_color_id = request.POST.get('product_color')
@@ -295,7 +303,7 @@ def add_variant(request,product_id):
     return render(request,"admintemplate/variant.html")
 
 
-
+@never_cache
 def add_variantdemo(request,id):
     product = get_object_or_404(Product, id = id)
     print(id)
@@ -323,8 +331,8 @@ def add_variantdemo(request,id):
         
     return render(request,"admintemplate/product.html")
 
-
-
+@login_required(login_url='admin_signup')
+@never_cache
 def variantlist(request):
     # product = get_object_or_404(Product, id=id)
     variants = Variants.objects.all()
