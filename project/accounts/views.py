@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from project import settings
-from cart.models import Orders
+from cart.models import Orders,CartItem
 import razorpay
 from django.conf import settings
 import json
@@ -77,12 +77,12 @@ def callback(request):
             print("sucesssssssssssss")
             order.status = PaymentStatus.SUCCESS
             order.save()
-            return render(request, "usertemplate/confirmation.html", context={"status": order.status})
+            return redirect('ordersuccess')
         else:
             order.status = PaymentStatus.FAILURE
             print("ffffffffffffffff")
             order.save()
-            return render(request, "errorpage.html", context={"status": order.status})
+            return redirect('orderfailure')
     else:
         payment_id = json.loads(request.POST.get("error[metadata]")).get("payment_id")
         provider_order_id = json.loads(request.POST.get("error[metadata]")).get(
@@ -92,9 +92,22 @@ def callback(request):
         order.payment_id = payment_id
         order.status = PaymentStatus.FAILURE
         order.save()
-        return render(request, "errorpage.html", context={"status": order.status})
+        return redirect('orderfailure')
+       
 
 
 
 
 
+def ordersuccess(request):
+    cart_item = CartItem.objects.filter(user=request.user)
+    for cart in cart_item:
+        cart.delete()
+    return render(request,"usertemplate/confirmation.html")
+
+def orderfailure(request):
+    orders = Orders.objects.all().order_by('id').first()
+    orders.delete()
+    
+    return render(request,"errorpage.html")
+    

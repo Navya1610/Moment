@@ -11,7 +11,7 @@ from django.db.models import Count
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # Create your views here.
-@login_required(login_url='handlelogin')
+
 @never_cache
 def welcome(request):
     return render(request,"usertemplate/welcome.html")

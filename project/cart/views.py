@@ -88,13 +88,13 @@ def add_cart(request, product_id, variant_id):
 
 @login_required(login_url='handlelogin')
 @never_cache
-def cart(request,  total_discount = 0, cart_items = None):
+def cart(request,  total_discount = 0):
     total = 0
     quantity = 0
     
     print("carttttttttttttttttttttt")
     try:
-        cart_item = CartItem.objects.filter(user=request.user)
+        cart_items = CartItem.objects.filter(user=request.user)
     except:
         pass
     
@@ -104,7 +104,7 @@ def cart(request,  total_discount = 0, cart_items = None):
         
         
         
-        for cart_item in cart_item:
+        for cart_item in cart_items:
             product = cart_item.product
             variant = cart_item.variant
             
@@ -138,9 +138,11 @@ def cart(request,  total_discount = 0, cart_items = None):
         
         total_discount = request.session.get('total_discount',0)
         total_discount = float(total_discount)
+        print(total_discount)
         
-        if total_discount > 0:
+        if total_discount:
             for cart_item in cart_items:
+                print(total_discount)
                 cart_item.coupon_amount = total_discount
                 cart_item.save()
             total -= total_discount
@@ -158,13 +160,19 @@ def cart(request,  total_discount = 0, cart_items = None):
     
     try:
         cart_item = CartItem.objects.filter(user=request.user)
+        if not cart_item:
+            total= 0
+            quantity = 0
+            total_discount = 0
+            
+            
     except:
         pass
     
     context = {
         'total': total,
         'quantity': quantity,
-        'cart_items': cart_items,
+        # 'cart_items': cart_items,
         'cart_item':cart_item,
         'total_discount' : total_discount,
         
@@ -480,7 +488,7 @@ def payment_select(request, checkout_id, unit_amount = 0):
                     discount_amount = None if cart_item.coupon_amount is None else cart_item.coupon_amount,
                     
                 ) 
-            cart_items.delete()
+            
 
             return render(
                 request,"usertemplate/payment.html",
