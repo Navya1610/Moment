@@ -298,7 +298,7 @@ def checkout(request):
             else:
                 cart_item.at_max = False
                 
-        
+        print(total)
         
         
     except Cart.DoesNotExist:

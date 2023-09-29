@@ -83,7 +83,7 @@
           {% csrf_token %}
           <div class="form-group">
             <label for="product_name">Product Name</label>
-            <input type="text" class="form-control" id="product_name" name="product_name" required pattern = "^[a-zA-Z]+$" title="Only letters are allowed (no spaces or numbers)">
+            <input type="text" class="form-control" id="product_name" name="product_name" required>
           </div>
 
           <div class="form-group">
@@ -135,7 +135,7 @@
 
           <div class="form-group">
             <label for="product_mrp">Offer Price</label>
-            <input type="number" class="form-control" id="product_mrp" name="product_offer_price" required min="1">
+            <input type="number" class="form-control" id="product_mrp" name="product_offer_price" >
           </div>
 
           {% comment %} <div class="form-group">
